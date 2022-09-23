@@ -15,6 +15,7 @@ const getCartById = async (userId) => {
         p.thumbnail,
         p.id AS productId,
         s.id AS sizeId
+        o.id as productOptionId
     FROM carts c, product_options o, products p, sizes s
     WHERE c.product_option_id = o.id
     AND o.product_id = p.id 
