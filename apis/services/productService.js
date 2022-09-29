@@ -1,32 +1,36 @@
 const { productDao } = require('../models');
 
 const getDetail = async (productId, userId) => {
-  const [getStyleCode] = await productDao.getStyleCode(productId);
-  const styleCodeFront = getStyleCode.style_code.substring(0, 6)
-  if (!getStyleCode) {
-    const err = new Error("product is not exists");
-    err.statusCode = 400;
-    throw err
-  }
-  const getThumbnail = await productDao.getThumbnail(styleCodeFront)
-  const [getDescription] = await productDao.getDescription(productId)
-  const getProductOptions = await productDao.getProductOptions(productId)
-  const [getReview] = await productDao.getReview(productId)
-  let isWished = false;
+  //1. product의 상세 정보
+  /**
+    - product options
+    - review
+    - isWished 
+   */
+  //2. 해당 상품과 관련된 상품들의 정보
+  // - 썸네일
+  const product = await productDao.getProduct(productId);
 
-  if (userId) {
-    const [checkWished] = await productDao.isWished(productId, userId)
-    if (checkWished) {
-      isWished = true;
-    }
+  if (!product) {
+    const err = new Error('product is not exists');
+    err.statusCode = 404;
+    throw err;
   }
-  getDescription.getThumbnail = getThumbnail;
-  getDescription.productOptions = getProductOptions;
-  getDescription.review = getReview;
+
+  const productOptions = await productDao.getProductOptions(productId);
+  const productReview = await productDao.getReviewList(productId);
+  const isWished = Boolean(await productDao.isWished(productId, userId));
+
+  const styleCode = product.styleCode.substring(0, 6);
+  const relatedProducts = await productDao.getRelatedProducts(styleCode);
+
+  getDescription.relatedProducts = relatedProducts;
+  getDescription.productOptions = productOptions;
+  getDescription.review = productReview;
   getDescription.isWished = isWished;
   return getDescription;
-}
+};
 
 module.exports = {
-  getDetail
-}
+  getDetail,
+};

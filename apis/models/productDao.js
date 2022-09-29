@@ -1,6 +1,5 @@
 const database = require('./dataSource');
 
-
 const getProductOptions = async (productId) => {
   try {
     return await database.query(
@@ -11,21 +10,22 @@ const getProductOptions = async (productId) => {
       FROM product_options po
       JOIN sizes s ON s.id = po.size_id
       WHERE po.product_id = ?
-      `, [productId]
+      `,
+      [productId]
     );
-  }
-  catch (err) {
+  } catch (err) {
     const error = new Error(`INVALID_DATA_INPUT`);
     error.statusCode = 500;
     throw error;
   }
-}
+};
 
-const getDescription = async (productId) => {
+const getProduct = async (productId) => {
   try {
     const getDescription = await database.query(
-      `select 
-        b.name as brandName, 
+      `select
+        p.id AS productId 
+        b.name As brandName, 
         p.name AS productName, 
         p.style_code AS styleCode, 
         p.thumbnail AS thumbnail, 
@@ -37,18 +37,18 @@ const getDescription = async (productId) => {
       JOIN product_images pi ON pi.product_id = p.id 
       JOIN brands b ON b.id = p.brand_id 
       where p.id =?
-      `, [productId]
-    )
+      `,
+      [productId]
+    );
     return getDescription;
-  }
-  catch (err) {
+  } catch (err) {
     const error = new Error(`INVALID_DATA_INPUT`);
     error.statusCode = 500;
     throw error;
   }
-}
+};
 
-const getReview = async (productId) => {
+const getReviewList = async (productId) => {
   try {
     return await database.query(
       `SELECT
@@ -60,15 +60,15 @@ const getReview = async (productId) => {
       JOIN products p ON p.id = r.product_id
       JOIN users u ON u.id = r.user_id
       WHERE r.product_id = ? 
-      `, [productId]
-    )
-  }
-  catch (err) {
+      `,
+      [productId]
+    );
+  } catch (err) {
     const error = new Error(`INVALID_DATA_INPUT`);
     error.statusCode = 500;
     throw error;
   }
-}
+};
 
 const getStyleCode = async (productId) => {
   try {
@@ -77,56 +77,60 @@ const getStyleCode = async (productId) => {
         style_code
       FROM products
       WHERE products.id = ?
-      `, [productId]
-    )
-  }
-  catch (err) {
+      `,
+      [productId]
+    );
+  } catch (err) {
     const error = new Error(`INVALID_DATA_INPUT`);
     error.statusCode = 500;
     throw error;
   }
-}
+};
 
-const getThumbnail = async (getStyleCode) => {
+const getRelatedProducts = async (styleCode) => {
   try {
     return await database.query(
       `SELECT
-      JSON_ARRAYAGG(thumbnail) AS thumbnail
-      FROM products
-      WHERE LEFT(style_code,6) = ?
-      `, [getStyleCode]
-    )
-  }
-  catch (err) {
+       p.id AS productId
+       p.thumbnail
+      FROM products p 
+      WHERE LEFT(p.style_code,6) = ?
+      `,
+      [styleCode]
+    );
+  } catch (err) {
     const error = new Error(`INVALID_DATA_INPUT`);
     error.statusCode = 500;
     throw error;
   }
-}
+};
 
 const isWished = async (productId, userId) => {
   try {
-    return await database.query(
-      `SELECT
-        user_id,
-        product_id
-      FROM wishlist
-      WHERE product_id = ? AND user_id = ? 
-      `, [productId, userId]
-    )
-  }
-  catch (err) {
+    const [result] = await database.query(
+      `SELECT EXISTS(
+        SELECT (
+          id
+        )
+        FROM wishlist
+        WHERE product_id = ? AND user_id = ?
+      ) AS isWished 
+      `,
+      [productId, userId]
+    );
+    return result.isWished;
+  } catch (err) {
     const error = new Error(`INVALID_DATA_INPUT`);
     error.statusCode = 500;
     throw error;
   }
-}
+};
 
 module.exports = {
   getProductOptions,
-  getDescription,
-  getReview,
+  getProduct,
+  getReviewList,
   getStyleCode,
-  getThumbnail,
-  isWished
-}
+  getRelatedProducts,
+  isWished,
+};
