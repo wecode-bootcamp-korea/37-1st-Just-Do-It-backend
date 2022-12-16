@@ -1,0 +1,13 @@
+DATABASE_URL = “mysql://root:whqowjd!@first-project.cl5ve1o7k95u.ap-northeast-1.rds.amazonaws.com:3306/nike”
+
+PORT = 8000
+TYPEORM_TYPE = mysql
+TYPEORM_HOST = 127.0.0.1
+TYPEORM_USERNAME = root
+TYPEORM_PASSWORD = 0519
+TYPEORM_DATABASE = nike
+TYPEORM_PORT = 3306
+
+ALGORITHM=HS256
+JWT_EXPIRES_IN=9d
+JWT_SECRET=cho-bae-jeong
