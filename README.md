@@ -35,14 +35,7 @@ Back-End : Node.js, Express, JSON WEB TOKEN, Bcrypt, Mysql, AWS(RDS)<br>
 - 장바구니 (CRUD) & 옵션변경에서 상세페이지 (R, API)<br>
 - 구매하기 (orders 테이블 부재로 재고 관리만, 장바구니 구매시 카트 삭제(transaction)<br>
 
-6. 내가 구현한 기능 리스트
-- 로그인 API : 토큰 발급하여 로그인 유저 사이트 이용 구분
-- 장바구니 CRUD
-- 장바구니에 담긴 상품 옵션 변경페이지
-- 구매 API
-- 실시간 재고 확인 함수 모듈화 구현<br>
-
-7. 개선 사항 및 필요한 추가 기능 구현 리스트<br>
+6. 개선 사항 및 필요한 추가 기능 구현 리스트<br>
   - 결제시 orders와 sales db추가하여 매출 및 주문 관리 필요<br>
   - Dao단에서 쿼리를 최대한 적게 이용하여 리팩토링 필요 (ex, checkStock을 쿼리문에서 사용)
   - promotion<br>
@@ -50,15 +43,7 @@ Back-End : Node.js, Express, JSON WEB TOKEN, Bcrypt, Mysql, AWS(RDS)<br>
   - 백엔드 단에서 검색기능<br>
   - 소셜로그인<br>
 
-8. Reference<br>
+7. Reference<br>
 이 프로젝트는 나이키 사이트를 참조하여 학습목적으로 만들었습니다.<br>
 실무수준의 프로젝트이지만 학습용으로 만들었기 때문에 이 코드를 활용하여 이득을 취하거나 무단 배포할 경우 법적으로 문제될 수 있습니다.<br>
 이 프로젝트에서 사용하고 있는 사진 대부분은 위코드에서 직접 촬영한 것이므로 해당 프로젝트 외부인이 사용할 수 없습니다.<br>
-
-
-# 프로젝트 종료 후 개인작업 진행중
-- [X] 이미지 클라우드 S3로 이전
-  - [ ] 이미지 URL DB 수정   
-- [X] Docker 컨테이너 활용 EC2 배포   
-- [ ] Swagger API 문서화 작업   
-- [ ] 소셜 로그인 
